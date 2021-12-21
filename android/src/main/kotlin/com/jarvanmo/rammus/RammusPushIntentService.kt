@@ -35,15 +35,13 @@ class RammusPushIntentService : AliyunMessageIntentService()
 
     override fun onMessage(context: Context, message: CPushMessage) {
         Log.d("RammusPushIntentService","onMessage title is ${message.title}, messageId is ${message.messageId}, content is ${message.content}")
-        Handler(Looper.getMainLooper()).postDelayed({
-//            RammusPushHandler.methodChannel?.invokeMethod("onMessageArrived", mapOf(
-//                    "appId" to message.appId,
-//                    "content" to message.content,
-//                    "messageId" to message.messageId,
-//                    "title" to message.title,
-//                    "traceInfo" to message.traceInfo
-//            ))
-        }, 1500)
+        RammusPlugin.onMessage(
+                message.title!!,
+                message.content!!,
+                message.appId!!,
+                message.appId!!,
+                message.traceInfo!!,
+        )
     }
 
     override fun onNotificationOpened(p0: Context?, title: String?, summary: String?, extras: String?) {

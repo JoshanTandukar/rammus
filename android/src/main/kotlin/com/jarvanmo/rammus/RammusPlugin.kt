@@ -67,7 +67,24 @@ class RammusPlugin: FlutterPlugin, ActivityAware {
                     mapOf(
                             "title" to title,
                             "summary" to summary,
-                            "extras" to extras
+                            "extras" to extras,
+                    )
+            )
+        }
+
+        @JvmStatic
+        fun onMessage(title:String, content:String, appId:String, messageId:String, traceInfo:String)
+        {
+            Log.d("RammusPlugin","onMessage title is $title, messageId is $messageId, content is $content, appId is $appId, traceInfo is $traceInfo")
+
+            instance.sendNotification(
+                    "onMessage",
+                    mapOf(
+                            "title" to title,
+                            "content" to content,
+                            "appId" to appId,
+                            "messageId" to messageId,
+                            "traceInfo" to traceInfo,
                     )
             )
         }

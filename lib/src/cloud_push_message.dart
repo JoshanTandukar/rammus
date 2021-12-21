@@ -4,17 +4,17 @@ class CloudPushMessage {
   final String? title;
   final String? content;
   final String? traceInfo;
-
-  CloudPushMessage(
-      {this.messageId, this.appId, this.title, this.content, this.traceInfo});
-}
-
-class OnNotification {
-  final String? title;
   final String? summary;
   final Map? extras;
 
-  OnNotification({this.title, this.summary, this.extras});
+  CloudPushMessage(
+      {this.messageId,
+      this.appId,
+      this.title,
+      this.content,
+      this.traceInfo,
+      this.summary,
+      this.extras});
 }
 
 class OnNotificationOpened {

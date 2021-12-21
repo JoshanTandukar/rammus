@@ -1,26 +1,31 @@
 import 'dart:async';
+
 import 'package:flutter/services.dart';
 import 'package:rammus/src/NotificationChannel.dart';
 import 'package:rammus/src/RammusPlugin.dart';
 import 'package:rammus/src/cloud_push_message.dart';
+
 import 'common_callback_result.dart';
 
-class RammusClient
-{
-
+class RammusClient {
   /// Stream for the registration events.
   late StreamSubscription<dynamic> initCloudStream;
-  final StreamController<CommonCallbackResult> _initCloudChannelResultController = StreamController.broadcast();
+  final StreamController<CommonCallbackResult>
+      _initCloudChannelResultController = StreamController.broadcast();
   late Stream<CommonCallbackResult> initCloudChannelResult;
 
   late StreamSubscription<dynamic> notificationStream;
-  final StreamController<OnNotification> _notificationResultStreamController = StreamController.broadcast();
-  late Stream<OnNotification> notificationResultStream;
+  final StreamController<CloudPushMessage> _notificationResultStreamController =
+      StreamController.broadcast();
+  late Stream<CloudPushMessage> notificationResultStream;
 
-  RammusClient()
-  {
-    initCloudStream = RammusPlugin.initCloudChannel.receiveBroadcastStream(0).listen(_parseRegistrationEvent);
-    notificationStream = RammusPlugin.notificationChannel.receiveBroadcastStream(0).listen(_parseNotificationEvent);
+  RammusClient() {
+    initCloudStream = RammusPlugin.initCloudChannel
+        .receiveBroadcastStream(0)
+        .listen(_parseRegistrationEvent);
+    notificationStream = RammusPlugin.notificationChannel
+        .receiveBroadcastStream(0)
+        .listen(_parseNotificationEvent);
 
     initCloudChannelResult = _initCloudChannelResultController.stream;
     notificationResultStream = _notificationResultStreamController.stream;
@@ -29,38 +34,32 @@ class RammusClient
   /// Cleanly shuts down the messaging client when you are done with it.
   ///
   /// It will dispose() the client after shutdown, so it could not be reused.
-  Future<void> shutdown() async
-  {
-    try
-    {
+  Future<void> shutdown() async {
+    try {
       await initCloudStream.cancel();
       await notificationStream.cancel();
 
       await _initCloudChannelResultController.close();
       await _notificationResultStreamController.close();
 
-      return await RammusPlugin.methodChannel.invokeMethod('RammusClient#shutdown', null);
-    }
-    on PlatformException catch (err)
-    {
+      return await RammusPlugin.methodChannel
+          .invokeMethod('RammusClient#shutdown', null);
+    } on PlatformException catch (err) {
       throw RammusPlugin.convertException(err);
     }
   }
 
-  Future<CommonCallbackResult> initPushService() async
-  {
-    try
-    {
-      final data = await RammusPlugin.methodChannel.invokeMethod('initPushService');
+  Future<CommonCallbackResult> initPushService() async {
+    try {
+      final data =
+          await RammusPlugin.methodChannel.invokeMethod('initPushService');
       return CommonCallbackResult(
         isSuccessful: data["isSuccessful"],
         response: data["response"],
         errorCode: data["errorCode"],
         errorMessage: data["errorMessage"],
       );
-    }
-    on PlatformException catch (err)
-    {
+    } on PlatformException catch (err) {
       throw RammusPlugin.convertException(err);
     }
   }
@@ -71,11 +70,11 @@ class RammusClient
   ///为了更好的用户体验，一些参数请不要用传[null]。
   ///[id]一定要和后台推送时候设置的通知通道一样，否则Android8.0以上无法完成通知推送。
   ///For Android 8 and above use notification channel
-  Future<CommonCallbackResult> setupNotificationManager(List<NotificationChannel> channels) async
-  {
-    try
-    {
-      final data = await RammusPlugin.methodChannel.invokeMethod('setupNotificationManager');
+  Future<CommonCallbackResult> setupNotificationManager(
+      List<NotificationChannel> channels) async {
+    try {
+      final data = await RammusPlugin.methodChannel
+          .invokeMethod('setupNotificationManager');
 
       return CommonCallbackResult(
         isSuccessful: data["isSuccessful"],
@@ -83,26 +82,21 @@ class RammusClient
         errorCode: data["errorCode"],
         errorMessage: data["errorMessage"],
       );
-    }
-    on PlatformException catch (err)
-    {
+    } on PlatformException catch (err) {
       throw RammusPlugin.convertException(err);
     }
   }
 
   ///确保注册成功以后调用获取[deviceId]
-  Future<String?> get deviceId async
-  {
+  Future<String?> get deviceId async {
     return await RammusPlugin.methodChannel.invokeMethod('deviceId');
   }
 
-  void _parseRegistrationEvent(dynamic event)
-  {
+  void _parseRegistrationEvent(dynamic event) {
     final String eventName = event['name'];
     final data = Map<String, dynamic>.from(event['data']);
 
-    switch (eventName)
-    {
+    switch (eventName) {
       case 'initCloudChannel':
         _initCloudChannelResultController.add(
           CommonCallbackResult(
@@ -118,19 +112,34 @@ class RammusClient
     }
   }
 
-  void _parseNotificationEvent(dynamic event)
-  {
+  void _parseNotificationEvent(dynamic event) {
     final String eventName = event['name'];
     final data = Map<String, dynamic>.from(event['data']);
 
-    switch (eventName)
-    {
+    switch (eventName) {
       case 'onNotification':
         _notificationResultStreamController.add(
-          OnNotification(
+          CloudPushMessage(
             title: data["title"],
             summary: data["summary"],
             extras: data["extras"],
+            appId: null,
+            content: null,
+            messageId: null,
+            traceInfo: null,
+          ),
+        );
+        break;
+      case 'onMessage':
+        _notificationResultStreamController.add(
+          CloudPushMessage(
+            title: data["title"],
+            traceInfo: data["traceInfo"],
+            appId: data["appId"],
+            content: data["content"],
+            messageId: data["messageId"],
+            summary: null,
+            extras: null,
           ),
         );
         break;
