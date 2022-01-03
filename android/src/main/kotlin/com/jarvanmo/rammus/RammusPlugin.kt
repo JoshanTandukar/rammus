@@ -73,7 +73,7 @@ class RammusPlugin: FlutterPlugin, ActivityAware {
         }
 
         @JvmStatic
-        fun onMessage(title:String, content:String, appId:String, messageId:String, traceInfo:String)
+        fun onMessage(title:String, content:Map<String, String>, appId:String, messageId:String, traceInfo:String)
         {
             Log.d("RammusPlugin","onMessage title is $title, messageId is $messageId, content is $content, appId is $appId, traceInfo is $traceInfo")
 
