@@ -2,7 +2,7 @@ class CloudPushMessage {
   final String? messageId;
   final String? appId;
   final String? title;
-  final Map? content;
+  final String? content;
   final String? traceInfo;
   final String? summary;
   final Map? extras;
