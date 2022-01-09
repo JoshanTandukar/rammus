@@ -161,11 +161,6 @@ class RammusPlugin: FlutterPlugin, ActivityAware {
 
     override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
         Log.d(TAG, "onDetachedFromEngine: TwilioVoice.onDetachedFromEngine")
-        methodChannel.setMethodCallHandler(null)
-        initCloudChannel.setStreamHandler(null)
-        handleNotificationChannel.setStreamHandler(null)
-        callIncomingChannel.setStreamHandler(null)
-        callOutGoingChannel.setStreamHandler(null)
     }
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding)
@@ -176,11 +171,6 @@ class RammusPlugin: FlutterPlugin, ActivityAware {
     override fun onDetachedFromActivityForConfigChanges()
     {
         Log.d(TAG, "onDetachedFromActivityForConfigChanges: TwilioVoice.onDetachedFromActivityForConfigChanges")
-        methodChannel.setMethodCallHandler(null)
-        initCloudChannel.setStreamHandler(null)
-        handleNotificationChannel.setStreamHandler(null)
-        callIncomingChannel.setStreamHandler(null)
-        callOutGoingChannel.setStreamHandler(null)
     }
 
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
@@ -190,11 +180,6 @@ class RammusPlugin: FlutterPlugin, ActivityAware {
     override fun onDetachedFromActivity()
     {
         Log.d(TAG, "onDetachedFromActivity: TwilioVoice.onDetachedFromActivity")
-        methodChannel.setMethodCallHandler(null)
-        initCloudChannel.setStreamHandler(null)
-        handleNotificationChannel.setStreamHandler(null)
-        callIncomingChannel.setStreamHandler(null)
-        callOutGoingChannel.setStreamHandler(null)
     }
 
     fun initPushService(result: Result)
