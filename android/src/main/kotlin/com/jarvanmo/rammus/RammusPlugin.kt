@@ -59,6 +59,100 @@ class RammusPlugin: FlutterPlugin, ActivityAware {
         }
 
         @JvmStatic
+        fun initPushService(result: Result)
+        {
+            PushServiceFactory.init(applicationContext)
+            val pushService = PushServiceFactory.getCloudPushService()
+            pushService.register(applicationContext, object : CommonCallback
+            {
+                override fun onSuccess(response: String?)
+                {
+                    sendInitCloudEvent(
+                        "initCloudChannel",
+                        mapOf(
+                            "isSuccessful" to true,
+                            "response" to response,
+                            "errorCode" to null,
+                            "errorMessage" to null
+                        )
+                    )
+                    result.success(
+                        mapOf(
+                            "isSuccessful" to true,
+                            "response" to response,
+                            "errorCode" to null,
+                            "errorMessage" to null
+                        ),
+                    )
+                }
+
+                override fun onFailed(errorCode: String?, errorMessage: String?)
+                {
+                    sendInitCloudEvent(
+                        "initCloudChannel",
+                        mapOf(
+                            "isSuccessful" to false,
+                            "response" to null,
+                            "errorCode" to errorCode,
+                            "errorMessage" to errorMessage
+                        ),
+                    )
+                    result.success(
+                        mapOf(
+                            "isSuccessful" to false,
+                            "response" to null,
+                            "errorCode" to errorCode,
+                            "errorMessage" to errorMessage
+                        ),
+                    )
+                }
+            })
+            pushService.setPushIntentService(RammusPushIntentService::class.java)
+            val appInfo = applicationContext.packageManager
+                .getApplicationInfo(applicationContext.packageName, PackageManager.GET_META_DATA)
+            val xiaomiAppId = appInfo.metaData.getString("com.xiaomi.push.client.app_id")
+            val xiaomiAppKey = appInfo.metaData.getString("com.xiaomi.push.client.app_key")
+            if ((xiaomiAppId != null && xiaomiAppId.isNotBlank())
+                && (xiaomiAppKey != null && xiaomiAppKey.isNotBlank())){
+                Log.d(TAG, "正在注册小米推送服务...")
+                MiPushRegister.register(applicationContext, xiaomiAppId, xiaomiAppKey)
+            }
+            val huaweiAppId = appInfo.metaData.getString("com.huawei.hms.client.appid")
+            if (huaweiAppId != null && huaweiAppId.toString().isNotBlank()){
+                Log.d(TAG, "正在注册华为推送服务...")
+                HuaWeiRegister.register(Application())
+            }
+            val oppoAppKey = appInfo.metaData.getString("com.oppo.push.client.app_key")
+            val oppoAppSecret = appInfo.metaData.getString("com.oppo.push.client.app_secret")
+            if ((oppoAppKey != null && oppoAppKey.isNotBlank())
+                && (oppoAppSecret != null && oppoAppSecret.isNotBlank())){
+                Log.d(TAG, "正在注册Oppo推送服务...")
+                OppoRegister.register(applicationContext, oppoAppKey, oppoAppSecret)
+            }
+            val meizuAppId = appInfo.metaData.getString("com.meizu.push.client.app_id")
+            val meizuAppKey = appInfo.metaData.getString("com.meizu.push.client.app_key")
+            if ((meizuAppId != null && meizuAppId.isNotBlank())
+                && (meizuAppKey != null && meizuAppKey.isNotBlank())){
+                Log.d(TAG, "正在注册魅族推送服务...")
+                MeizuRegister.register(applicationContext, meizuAppId, meizuAppKey)
+            }
+            val vivoAppId = appInfo.metaData.getString("com.vivo.push.app_id")
+            val vivoApiKey = appInfo.metaData.getString("com.vivo.push.api_key")
+            if ((vivoAppId != null && vivoAppId.isNotBlank())
+                && (vivoApiKey != null && vivoApiKey.isNotBlank())){
+                Log.d(TAG, "正在注册Vivo推送服务...")
+                VivoRegister.register(applicationContext)
+            }
+            val gcmSendId = appInfo.metaData.getString("com.gcm.push.send_id")
+            val gcmApplicationId = appInfo.metaData.getString("com.gcm.push.app_id")
+            if ((gcmSendId != null && gcmSendId.isNotBlank())
+                && (gcmApplicationId != null && gcmApplicationId.isNotBlank())){
+                Log.d(TAG, "正在注册Gcm推送服务...")
+                GcmRegister.register(applicationContext, gcmSendId, gcmApplicationId)
+            }
+        }
+
+        @JvmStatic
         fun onNotification(title:String, summary:String, extras:Map<String, String>)
         {
             Log.d("RammusPlugin","onNotification title is $title, summary is $summary, extras: $extras")
@@ -182,98 +276,98 @@ class RammusPlugin: FlutterPlugin, ActivityAware {
         Log.d(TAG, "onDetachedFromActivity: TwilioVoice.onDetachedFromActivity")
     }
 
-    fun initPushService(result: Result)
-    {
-        PushServiceFactory.init(applicationContext)
-        val pushService = PushServiceFactory.getCloudPushService()
-        pushService.register(applicationContext, object : CommonCallback
-        {
-            override fun onSuccess(response: String?)
-            {
-                sendInitCloudEvent(
-                        "initCloudChannel",
-                        mapOf(
-                                "isSuccessful" to true,
-                                "response" to response,
-                                "errorCode" to null,
-                                "errorMessage" to null
-                        )
-                )
-                result.success(
-                        mapOf(
-                                "isSuccessful" to true,
-                                "response" to response,
-                                "errorCode" to null,
-                                "errorMessage" to null
-                        ),
-                )
-            }
-
-            override fun onFailed(errorCode: String?, errorMessage: String?)
-            {
-                sendInitCloudEvent(
-                        "initCloudChannel",
-                        mapOf(
-                                "isSuccessful" to false,
-                                "response" to null,
-                                "errorCode" to errorCode,
-                                "errorMessage" to errorMessage
-                        ),
-                )
-                result.success(
-                        mapOf(
-                                "isSuccessful" to false,
-                                "response" to null,
-                                "errorCode" to errorCode,
-                                "errorMessage" to errorMessage
-                        ),
-                )
-            }
-        })
-        pushService.setPushIntentService(RammusPushIntentService::class.java)
-        val appInfo = applicationContext.packageManager
-                .getApplicationInfo(applicationContext.packageName, PackageManager.GET_META_DATA)
-        val xiaomiAppId = appInfo.metaData.getString("com.xiaomi.push.client.app_id")
-        val xiaomiAppKey = appInfo.metaData.getString("com.xiaomi.push.client.app_key")
-        if ((xiaomiAppId != null && xiaomiAppId.isNotBlank())
-                && (xiaomiAppKey != null && xiaomiAppKey.isNotBlank())){
-            Log.d(TAG, "正在注册小米推送服务...")
-            MiPushRegister.register(applicationContext, xiaomiAppId, xiaomiAppKey)
-        }
-        val huaweiAppId = appInfo.metaData.getString("com.huawei.hms.client.appid")
-        if (huaweiAppId != null && huaweiAppId.toString().isNotBlank()){
-            Log.d(TAG, "正在注册华为推送服务...")
-            HuaWeiRegister.register(Application())
-        }
-        val oppoAppKey = appInfo.metaData.getString("com.oppo.push.client.app_key")
-        val oppoAppSecret = appInfo.metaData.getString("com.oppo.push.client.app_secret")
-        if ((oppoAppKey != null && oppoAppKey.isNotBlank())
-                && (oppoAppSecret != null && oppoAppSecret.isNotBlank())){
-            Log.d(TAG, "正在注册Oppo推送服务...")
-            OppoRegister.register(applicationContext, oppoAppKey, oppoAppSecret)
-        }
-        val meizuAppId = appInfo.metaData.getString("com.meizu.push.client.app_id")
-        val meizuAppKey = appInfo.metaData.getString("com.meizu.push.client.app_key")
-        if ((meizuAppId != null && meizuAppId.isNotBlank())
-                && (meizuAppKey != null && meizuAppKey.isNotBlank())){
-            Log.d(TAG, "正在注册魅族推送服务...")
-            MeizuRegister.register(applicationContext, meizuAppId, meizuAppKey)
-        }
-        val vivoAppId = appInfo.metaData.getString("com.vivo.push.app_id")
-        val vivoApiKey = appInfo.metaData.getString("com.vivo.push.api_key")
-        if ((vivoAppId != null && vivoAppId.isNotBlank())
-                && (vivoApiKey != null && vivoApiKey.isNotBlank())){
-            Log.d(TAG, "正在注册Vivo推送服务...")
-            VivoRegister.register(applicationContext)
-        }
-        val gcmSendId = appInfo.metaData.getString("com.gcm.push.send_id")
-        val gcmApplicationId = appInfo.metaData.getString("com.gcm.push.app_id")
-        if ((gcmSendId != null && gcmSendId.isNotBlank())
-                && (gcmApplicationId != null && gcmApplicationId.isNotBlank())){
-            Log.d(TAG, "正在注册Gcm推送服务...")
-            GcmRegister.register(applicationContext, gcmSendId, gcmApplicationId)
-        }
-    }
+//    fun initPushService(result: Result)
+//    {
+//        PushServiceFactory.init(applicationContext)
+//        val pushService = PushServiceFactory.getCloudPushService()
+//        pushService.register(applicationContext, object : CommonCallback
+//        {
+//            override fun onSuccess(response: String?)
+//            {
+//                sendInitCloudEvent(
+//                        "initCloudChannel",
+//                        mapOf(
+//                                "isSuccessful" to true,
+//                                "response" to response,
+//                                "errorCode" to null,
+//                                "errorMessage" to null
+//                        )
+//                )
+//                result.success(
+//                        mapOf(
+//                                "isSuccessful" to true,
+//                                "response" to response,
+//                                "errorCode" to null,
+//                                "errorMessage" to null
+//                        ),
+//                )
+//            }
+//
+//            override fun onFailed(errorCode: String?, errorMessage: String?)
+//            {
+//                sendInitCloudEvent(
+//                        "initCloudChannel",
+//                        mapOf(
+//                                "isSuccessful" to false,
+//                                "response" to null,
+//                                "errorCode" to errorCode,
+//                                "errorMessage" to errorMessage
+//                        ),
+//                )
+//                result.success(
+//                        mapOf(
+//                                "isSuccessful" to false,
+//                                "response" to null,
+//                                "errorCode" to errorCode,
+//                                "errorMessage" to errorMessage
+//                        ),
+//                )
+//            }
+//        })
+//        pushService.setPushIntentService(RammusPushIntentService::class.java)
+//        val appInfo = applicationContext.packageManager
+//                .getApplicationInfo(applicationContext.packageName, PackageManager.GET_META_DATA)
+//        val xiaomiAppId = appInfo.metaData.getString("com.xiaomi.push.client.app_id")
+//        val xiaomiAppKey = appInfo.metaData.getString("com.xiaomi.push.client.app_key")
+//        if ((xiaomiAppId != null && xiaomiAppId.isNotBlank())
+//                && (xiaomiAppKey != null && xiaomiAppKey.isNotBlank())){
+//            Log.d(TAG, "正在注册小米推送服务...")
+//            MiPushRegister.register(applicationContext, xiaomiAppId, xiaomiAppKey)
+//        }
+//        val huaweiAppId = appInfo.metaData.getString("com.huawei.hms.client.appid")
+//        if (huaweiAppId != null && huaweiAppId.toString().isNotBlank()){
+//            Log.d(TAG, "正在注册华为推送服务...")
+//            HuaWeiRegister.register(Application())
+//        }
+//        val oppoAppKey = appInfo.metaData.getString("com.oppo.push.client.app_key")
+//        val oppoAppSecret = appInfo.metaData.getString("com.oppo.push.client.app_secret")
+//        if ((oppoAppKey != null && oppoAppKey.isNotBlank())
+//                && (oppoAppSecret != null && oppoAppSecret.isNotBlank())){
+//            Log.d(TAG, "正在注册Oppo推送服务...")
+//            OppoRegister.register(applicationContext, oppoAppKey, oppoAppSecret)
+//        }
+//        val meizuAppId = appInfo.metaData.getString("com.meizu.push.client.app_id")
+//        val meizuAppKey = appInfo.metaData.getString("com.meizu.push.client.app_key")
+//        if ((meizuAppId != null && meizuAppId.isNotBlank())
+//                && (meizuAppKey != null && meizuAppKey.isNotBlank())){
+//            Log.d(TAG, "正在注册魅族推送服务...")
+//            MeizuRegister.register(applicationContext, meizuAppId, meizuAppKey)
+//        }
+//        val vivoAppId = appInfo.metaData.getString("com.vivo.push.app_id")
+//        val vivoApiKey = appInfo.metaData.getString("com.vivo.push.api_key")
+//        if ((vivoAppId != null && vivoAppId.isNotBlank())
+//                && (vivoApiKey != null && vivoApiKey.isNotBlank())){
+//            Log.d(TAG, "正在注册Vivo推送服务...")
+//            VivoRegister.register(applicationContext)
+//        }
+//        val gcmSendId = appInfo.metaData.getString("com.gcm.push.send_id")
+//        val gcmApplicationId = appInfo.metaData.getString("com.gcm.push.app_id")
+//        if ((gcmSendId != null && gcmSendId.isNotBlank())
+//                && (gcmApplicationId != null && gcmApplicationId.isNotBlank())){
+//            Log.d(TAG, "正在注册Gcm推送服务...")
+//            GcmRegister.register(applicationContext, gcmSendId, gcmApplicationId)
+//        }
+//    }
 
     fun turnOnPushChannel(result: Result) {
         val pushService = PushServiceFactory.getCloudPushService()
