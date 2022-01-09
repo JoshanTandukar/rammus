@@ -17,7 +17,7 @@ class RammusPluginHandler : MethodChannel.MethodCallHandler
         when (call.method)
         {
             "deviceId" -> result.success(PushServiceFactory.getCloudPushService().deviceId)
-            "initPushService" -> RammusPlugin.instance.initPushService(result)
+            "initPushService" -> RammusPlugin.initPushService(result)
             "turnOnPushChannel" -> RammusPlugin.instance.turnOnPushChannel(result)
             "turnOffPushChannel" -> RammusPlugin.instance.turnOffPushChannel(result)
             "checkPushChannelStatus" -> RammusPlugin.instance.checkPushChannelStatus(result)
