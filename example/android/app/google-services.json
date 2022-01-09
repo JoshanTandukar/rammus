@@ -1,0 +1,142 @@
+{
+  "project_info": {
+    "project_number": "493137525978",
+    "project_id": "peeqlive-50180",
+    "storage_bucket": "peeqlive-50180.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:493137525978:android:4597e4fb20cb40b62db9e3",
+        "android_client_info": {
+          "package_name": "com.peeqlive"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "493137525978-1b9bl10ka6tvnn7aq1ehhcdfrmb4r537.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.peeqlive",
+            "certificate_hash": "0187822198455c3a12e9ac0c7e3c9f10183ff060"
+          }
+        },
+        {
+          "client_id": "493137525978-tl0l3neqb3oscql85mo09i3117sbm8d5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChp5Wd74fvPAK8ITBF9ECIWZwajONALw4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "493137525978-tl0l3neqb3oscql85mo09i3117sbm8d5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "493137525978-5u6qu2u9j2if1mkrh9plrqv1gt4hglhv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.peeqlive"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:493137525978:android:f7f5d278ef69f29f2db9e3",
+        "android_client_info": {
+          "package_name": "com.peeqlive.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "493137525978-c0ojivpjfo6j8bp6mmaa0u4bd6g0u39t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.peeqlive.dev",
+            "certificate_hash": "0187822198455c3a12e9ac0c7e3c9f10183ff060"
+          }
+        },
+        {
+          "client_id": "493137525978-tl0l3neqb3oscql85mo09i3117sbm8d5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChp5Wd74fvPAK8ITBF9ECIWZwajONALw4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "493137525978-tl0l3neqb3oscql85mo09i3117sbm8d5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "493137525978-5u6qu2u9j2if1mkrh9plrqv1gt4hglhv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.peeqlive"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:493137525978:android:2fd17d239633d21e2db9e3",
+        "android_client_info": {
+          "package_name": "com.peeqlive.staging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "493137525978-jntkh7c3b3iv24r9m3eo5b5f404n9k56.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.peeqlive.staging",
+            "certificate_hash": "0187822198455c3a12e9ac0c7e3c9f10183ff060"
+          }
+        },
+        {
+          "client_id": "493137525978-tl0l3neqb3oscql85mo09i3117sbm8d5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChp5Wd74fvPAK8ITBF9ECIWZwajONALw4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "493137525978-tl0l3neqb3oscql85mo09i3117sbm8d5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "493137525978-5u6qu2u9j2if1mkrh9plrqv1gt4hglhv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.peeqlive"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

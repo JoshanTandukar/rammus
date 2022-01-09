@@ -11,5 +11,5 @@ build/
 *.iml
 
 *.lock
-.example
-.example/
+/example
+/example/
