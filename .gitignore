@@ -11,3 +11,5 @@ build/
 *.iml
 
 *.lock
+.example
+.example/
