@@ -67,7 +67,7 @@ class RammusPlugin: FlutterPlugin, ActivityAware {
             {
                 override fun onSuccess(response: String?)
                 {
-                    sendInitCloudEvent(
+                    instance.sendInitCloudEvent(
                         "initCloudChannel",
                         mapOf(
                             "isSuccessful" to true,
@@ -88,7 +88,7 @@ class RammusPlugin: FlutterPlugin, ActivityAware {
 
                 override fun onFailed(errorCode: String?, errorMessage: String?)
                 {
-                    sendInitCloudEvent(
+                    instance.sendInitCloudEvent(
                         "initCloudChannel",
                         mapOf(
                             "isSuccessful" to false,
